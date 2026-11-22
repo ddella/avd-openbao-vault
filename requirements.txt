@@ -1,0 +1,7 @@
+# ---------------------------------------------
+# Modules required in your Dev Container
+# Use the command below to install them
+#   pip3 install -r requirements.txt
+# ---------------------------------------------
+hvac[parser]>=2.4.0
+PyYAML>=6.0

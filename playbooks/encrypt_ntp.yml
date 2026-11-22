@@ -1,0 +1,46 @@
+---
+#####################################################################
+##################### NTP password demo #############################
+#####################################################################
+# https://avd.arista.com/6.5/docs/plugins/Filter_plugins/encrypt.html
+
+# Use this playbook to encrypt a NTP password with its peer group.
+# It uses 'arista.avd.encrypt'.
+# Without prompt
+#    👉 ansible-playbook playbooks/encrypt_ntp.yml -i localhost, -c local \
+#         --extra-vars "PASSWORD=superSecret123" 👈
+# Prompts for password and peer group
+#    👉 ansible-playbook playbooks/encrypt_ntp.yml -i localhost, -c local 👈
+
+- name: 🔐 Encrypt NTP password demo
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_prompt:
+    # Enter your cleartext password
+    - name: PASSWORD
+      prompt: "Enter your NTP password in cleartext: "
+      private: true
+
+  tasks:
+    - name: 🔐 NTP encrypted password (type 7)
+      run_once: true
+      set_fact:
+        encrypted_password: "{{ PASSWORD | arista.avd.encrypt(passwd_type='ntp', salt=12) }}"
+
+    - name: 🔐 Show NTP encrypted password
+      debug:
+        msg:
+          - "The type-7 NTP password for [{{ PASSWORD }}]"
+          - "password: [{{ encrypted_password }}]"
+
+    - name: 🔓 NTP decrypt password (type 7)
+      run_once: true
+      set_fact:
+        cleartext: "{{ encrypted_password | arista.avd.decrypt(passwd_type='ntp') }}"
+
+    - name: 🔓 Show NTP decrypted password
+      debug:
+        msg:
+          - "The type-7 NTP password for NTP is [{{ cleartext }}]"

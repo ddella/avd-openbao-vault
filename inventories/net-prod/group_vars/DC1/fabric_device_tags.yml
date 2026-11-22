@@ -1,0 +1,38 @@
+---
+# Centralized dictionary mapping tags to specific hostnames
+# from the 'inventory.yml' file.
+
+fabric_device_tags:
+  ############################
+  ####### net-prod-dc1 #######
+  ############################
+  dc1-spine1:
+    - name: devicerole
+      value: spine
+    - name: enviroment
+      value: net-prod-dc1
+    - name: position
+      value: "1"
+
+  dc1-spine2:
+    - name: devicerole
+      value: spine
+    - name: enviroment
+      value: net-prod-dc1
+    - name: position
+      value: "2"
+
+  dc1-leaf1:
+    - name: devicerole
+      value: leaf
+    - name: enviroment
+      value: net-prod-dc1
+    - name: position
+      value: "1"
+  dc1-leaf2:
+    - name: devicerole
+      value: leaf
+    - name: enviroment
+      value: net-prod-dc1
+    - name: position
+      value: "2"

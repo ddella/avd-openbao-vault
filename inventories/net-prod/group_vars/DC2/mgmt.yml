@@ -1,0 +1,11 @@
+---
+#####################################################################
+############################### MGMT ################################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#management-interface
+# Out-of-Band (OOB) management interface settings.
+### GLOBAL DEFAULT: Management Gateway IP
+### Set to NULL to prevent accidental routing to a default IP.
+### This MUST be overridden in specific 'group_vars/all' (e.g., mgmt.yml).
+mgmt_gateway_ip: 172.16.2.1
+# mgmt_intf: Management0

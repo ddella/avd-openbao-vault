@@ -1,0 +1,23 @@
+---
+# https://yamllint.readthedocs.io/en/stable/configuration.html#extending-the-default-configuration
+extends: default
+
+rules:
+  # 130 chars should be enough
+  # but don't fail if a line is longer
+  line-length:
+    max: 130
+    level: warning
+  brackets:
+    max-spaces-inside: 1
+  braces:
+    max-spaces-inside: 1
+  comments:
+    min-spaces-from-content: 1
+
+ignore:
+  - intended/
+  - snapshots/
+  - anta/
+  - "*vault*.yml"
+  - "*enc.yml"

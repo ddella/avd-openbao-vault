@@ -1,0 +1,29 @@
+---
+# Fabric-wide settings. Secrets are resolved from this environment's OpenBao mount.
+fabric_name: FABRIC
+root_dir: "{{ inventory_dir }}"
+
+ansible_connection: ansible.netcommon.httpapi
+ansible_network_os: arista.eos.eos
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: false
+ansible_user: admin
+ansible_become: true
+ansible_become_method: enable
+
+mgmt_interface_settings:
+  vrf: MGMT
+
+bgp_peer_groups:
+  ipv4_underlay_peers:
+    cleartext_password: "{{ bgp.underlay.password }}"
+  evpn_overlay_peers:
+    cleartext_password: "{{ bgp.overlay.password }}"
+
+aaa_settings:
+  tacacs:
+    servers:
+      - host: 10.10.10.10
+        vrf: use_mgmt_interface_vrf
+        cleartext_key: "{{ aaa.tacacs.server1.key }}"
+        groups: [TACACS-SERVERS]

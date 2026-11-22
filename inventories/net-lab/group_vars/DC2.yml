@@ -1,0 +1,43 @@
+---
+bao_dc: dc2
+mgmt_gateway: 172.18.2.1
+
+spine:
+  defaults:
+    platform: vEOS-lab
+    loopback_ipv4_pool: 10.255.2.0/27
+    bgp_as: 65200
+  nodes:
+    - name: dc2-spine1
+      id: 1
+      mgmt_ip: 172.18.2.11/24
+    - name: dc2-spine2
+      id: 2
+      mgmt_ip: 172.18.2.12/24
+
+l3leaf:
+  defaults:
+    platform: vEOS-lab
+    loopback_ipv4_pool: 10.255.2.0/27
+    loopback_ipv4_offset: 2
+    vtep_loopback_ipv4_pool: 10.255.3.0/27
+    uplink_interfaces: [Ethernet1, Ethernet2]
+    uplink_switches: [dc2-spine1, dc2-spine2]
+    uplink_ipv4_pool: 10.255.255.64/26
+    virtual_router_mac_address: 00:1c:73:00:00:99
+    spanning_tree_mode: mstp
+  node_groups:
+    - group: DC2_LEAF1
+      bgp_as: 65201
+      nodes:
+        - name: dc2-leaf1
+          id: 1
+          mgmt_ip: 172.18.2.101/24
+          uplink_switch_interfaces: [Ethernet1, Ethernet1]
+    - group: DC2_LEAF2
+      bgp_as: 65202
+      nodes:
+        - name: dc2-leaf2
+          id: 2
+          mgmt_ip: 172.18.2.102/24
+          uplink_switch_interfaces: [Ethernet2, Ethernet2]

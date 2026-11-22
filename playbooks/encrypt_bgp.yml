@@ -1,0 +1,50 @@
+---
+#####################################################################
+##################### BGP password demo #############################
+#####################################################################
+# https://avd.arista.com/6.5/docs/plugins/Filter_plugins/encrypt.html
+
+# Use this playbook to encrypt a BGP password with its peer group.
+# It uses 'arista.avd.encrypt'.
+# Without prompt
+#    👉 ansible-playbook playbooks/encrypt_bgp.yml -i localhost, -c local \
+#         --extra-vars "PASSWORD=superSecret123 BGP_PEER_NAME=EVPN-OVERLAY-PEERS" 👈
+# Prompts for password and peer group
+#    👉 ansible-playbook playbooks/encrypt_bgp.yml -i localhost, -c local 👈
+
+- name: 🔐 Encrypt BGP password demo
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_prompt:
+    # Enter your cleartext password
+    - name: PASSWORD
+      prompt: "Enter your BGP password in cleartext: "
+      private: true
+    # Enter your BGP peer group name
+    - name: BGP_PEER_NAME
+      prompt: "Enter BGP peer group name: "
+      private: false
+
+  tasks:
+    - name: 🔐 BGP encrypted password (type 7)
+      run_once: true
+      set_fact:
+        encrypted_password: "{{ PASSWORD | arista.avd.encrypt(passwd_type='bgp', key=BGP_PEER_NAME) }}"
+
+    - name: 🔐 Show BGP encrypted password
+      debug:
+        msg:
+          - "The type-7 BGP password for [{{ PASSWORD }}] with BGP Peer Group [{{ BGP_PEER_NAME }}]"
+          - "password: [{{ encrypted_password }}]"
+
+    - name: 🔓 BGP decrypt password (type 7)
+      run_once: true
+      set_fact:
+        cleartext: "{{ encrypted_password | arista.avd.decrypt(passwd_type='bgp', key=BGP_PEER_NAME) }}"
+
+    - name: 🔓 Show BGP decrypted password
+      debug:
+        msg:
+          - "The type-7 BGP password for [BGP Peer Group [{{ BGP_PEER_NAME }}] is [{{ cleartext }}]"

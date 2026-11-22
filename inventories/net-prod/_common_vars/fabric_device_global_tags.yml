@@ -1,0 +1,9 @@
+---
+# Centralized dictionary mapping for global device tags.
+# Those TAGS are applied to all devices in the Playbook.
+
+fabric_device_global_tags:
+  - name: DC
+    value: net-prod
+  - name: site-name
+    value: net-prod

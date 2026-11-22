@@ -1,0 +1,8 @@
+---
+# ---------------------------------------------
+# Modules required in your Dev Container
+# Use the command below to install them
+#   ansible-galaxy collection install -r requirements.yml
+# ---------------------------------------------
+collections:
+  - name: community.hashi_vault

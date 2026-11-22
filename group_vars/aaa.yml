@@ -1,0 +1,53 @@
+---
+#####################################################################
+################################ AAA ################################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#aaa
+# Define the default name for the default mgmt VRF
+aaa_vrf_name: "use_mgmt_interface_vrf"
+aaa_vrf_list: []
+
+aaa_settings:
+  tacacs:
+    servers:
+      - host: 192.168.13.16
+        timeout: 30
+        cleartext_key: "{{ aaa.tacacs.server1.key }}"
+        groups:
+          - "tacservers"
+        vrf: "{{ aaa_vrf_name }}"
+      - host: 192.168.13.17
+        timeout: 30
+        cleartext_key: "{{ aaa.tacacs.server2.key }}"
+        groups:
+          - "tacservers"
+        vrf: "{{ aaa_vrf_name }}"
+    vrfs: "{{ aaa_vrf_list }}"
+
+  local_users:
+    - name: admin
+      privilege: 15
+      role: network-admin
+      sha512_password: "{{ users.admin_sha512_password }}"
+      ssh_key: "{{ users.user1_ssh_pri }}"
+      secondary_ssh_key: "{{ users.user1_ssh_sec }}"
+  authentication:
+    login:
+      default: "group tacservers local"
+    policies:
+      on_failure_log: true
+      on_success_log: true
+  authorization:
+    exec:
+      default:
+        "group tacservers local"
+    config_commands: true
+    commands:
+      all_default: "group tacservers local"
+  accounting:
+    exec:
+      default:
+        type: start-stop
+        methods:
+          - method: group
+            group: tacservers

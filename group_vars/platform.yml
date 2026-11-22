@@ -1,0 +1,12 @@
+---
+#####################################################################
+############################ PLATFORM ###############################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#platform
+# Click on the '' sign next to 'platform_settings:' to get more info
+platform_settings:
+  - platforms:
+      - 7280R3
+    reload_delay:
+      mlag: 300
+      non_mlag: 330

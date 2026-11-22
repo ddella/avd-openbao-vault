@@ -1,0 +1,41 @@
+---
+#####################################################################
+############################# LOGGING ###############################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#logging
+# Logging settings
+logging_vrf_name: "use_mgmt_interface_vrf"
+logging_vrfs_list: []
+logging_local_interface: true
+
+logging_settings:
+  # Use `logging local-interface <interface>` CLI instead of the deprecated `logging source-interface <interface>` CLI.
+  # 👉 The new CLI was introduced in EOS version 4.33.4. 👈
+  use_local_interface_cli: "{{ logging_local_interface }}"
+  hosts:  # >=1 items; required
+    # Syslog server name.
+    - name: 192.168.13.16
+      vrf: "{{ logging_vrf_name }}"
+      protocol: "udp"
+      ports:
+        - 6085
+  vrfs: "{{ logging_vrfs_list }}"
+
+  # Console logging severity level.
+  console: "debugging"
+  # Monitor logging severity level.
+  monitor: "informational"
+  buffered:
+    size: 1000000
+    # Buffer logging severity level.
+    level: "informational"
+  # Trap logging severity level.
+  # <str; "alerts" | "critical" | "debugging" | "emergencies" | "errors" | "informational" |
+  # "notifications" | "system" | "warnings" | "disabled">
+  trap: "informational"
+  synchronous:
+    # Synchronous logging severity level.
+    level: "critical"
+  format:
+    rfc5424: true
+    sequence_numbers: false

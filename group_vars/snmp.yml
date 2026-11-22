@@ -1,0 +1,85 @@
+---
+#####################################################################
+############################### SNMP ################################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#snmp
+# SNMP settings.
+# Configuration of remote SNMP engine IDs are currently only possible using `structured_config`.
+# Define the default name for the default mgmt VRF
+# The value will be interpreted according to these rules:
+# - `use_mgmt_interface_vrf` will configure the SNMP ACL under the VRF set with `mgmt_interface_vrf`.
+#   An error will be raised if `mgmt_ip` or `ipv6_mgmt_ip` are not configured for the device.
+# - `use_inband_mgmt_vrf` will configure the SNMP ACL under the VRF set with `inband_mgmt_vrf`.
+#   An error will be raised if inband management is not configured for the device.
+# - `use_default_mgmt_method_vrf` configures the SNMP ACL under the VRF selected by `default_mgmt_method`.
+#   That value selects one of the two options above.
+# - Any other string will be used directly as the VRF name.
+snmp_vrf_name: "use_mgmt_interface_vrf"
+snmp_vrfs_list:
+  - name: "{{ snmp_vrf_name }}"
+    # Enable/disable SNMP for this VRF.
+    enable: true
+    # IPv4 access-list name.
+    ipv4_acl: "snmp"
+  - name: default
+    enable: false
+
+snmp_settings_base:
+  # Generate a local engineId for SNMP using the 'compute_local_engineid_source' method.
+  compute_local_engineid: true
+  # compute_local_engineid_source: rfc3411_type5
+  # SNMP contact.
+  contact: "NetOps 555-555-5512"
+  # Enables SNMP location using `location_template` value.
+  location: true
+  location_template: >-
+    {{ acme_data_center | default('n/a')}} - pod
+    {{ acme_dmd['pod']| default('n/a') }}, rack
+    {{ acme_dmd['rack'] | default('n/a') }}, u{{ acme_dmd['u_loc'] | default('n/a') }}
+  vrfs: "{{ snmp_vrfs_list }}"
+  # Requires compute_local_engineid to be `true`.
+  # If enabled, SNMPv3 auth and priv passphrases are transformed using RFC 2574 to match their EOS CLI values.
+  # The algorithm requires a local engineId, which is unknown to AVD, hence the necessity to generate one beforehand.
+  compute_v3_user_localized_key: true
+  # Configuration of local SNMP users.
+  users:
+    - name: user1
+      group: snmp-ro
+      version: v3
+      auth: sha
+      auth_passphrase: "{{ snmpv3_users_secrets.user1_auth }}"
+      priv: aes
+      priv_passphrase: "{{ snmpv3_users_secrets.user1_priv }}"
+    - name: user2
+      group: snmp-rw
+      version: v3
+      auth: sha
+      auth_passphrase: "{{ snmpv3_users_secrets.user2_auth }}"
+      priv: aes
+      priv_passphrase: "{{ snmpv3_users_secrets.user2_priv }}"
+  hosts:
+    - host: 192.168.13.16
+      version: 3
+      users:
+        - username: user1
+          authentication_level: priv
+      vrf: "{{ snmp_vrf_name }}"
+  views:
+    - name: all
+      mib_family_name: "iso"
+      included: true
+  groups:
+    - name: snmp-ro
+      version: v3
+      authentication: priv
+      read: all
+    - name: snmp-rw
+      version: v3
+      authentication: priv
+      read: all
+      write: all
+  traps:
+    enable: true
+
+# By default, standard hosts just inherit the base settings
+snmp_settings: "{{ snmp_settings_base }}"

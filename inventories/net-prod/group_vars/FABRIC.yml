@@ -1,0 +1,13 @@
+---
+# Fabric-wide settings. Secrets are resolved from this environment's OpenBao mount.
+fabric_name: FABRIC
+root_dir: "{{ inventory_dir }}"
+
+# eAPI connection (for deploy). Credentials could also come from OpenBao.
+ansible_connection: ansible.netcommon.httpapi
+ansible_network_os: arista.eos.eos
+ansible_httpapi_use_ssl: true
+ansible_httpapi_validate_certs: true
+ansible_user: admin
+ansible_become: true
+ansible_become_method: enable

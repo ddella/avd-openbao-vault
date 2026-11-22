@@ -1,0 +1,40 @@
+---
+#####################################################################
+##################### SHA-512 password demo #########################
+#####################################################################
+# https://avd.arista.com/6.5/docs/plugins/Filter_plugins/secure_hash.html
+
+# Use this playbook to encrypt a SHA-512 password.
+# It uses 'arista.avd.secure_hash'.
+# Without prompt
+#    👉 ansible-playbook playbooks/encrypt_sha512.yml -i localhost, -c local \
+#         --extra-vars "PASSWORD=superSecret123" 👈
+# Prompts for password and peer group
+#    👉 ansible-playbook playbooks/encrypt_sha512.yml -i localhost, -c local 👈
+
+- name: 🔐 Encrypt SHA-512 password demo
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_prompt:
+    # Enter your cleartext password
+    - name: PASSWORD
+      prompt: "Enter your SHA-512 password in cleartext: "
+      private: true
+
+  tasks:
+    - name: 🎲 Generate a random 16-character salt
+      ansible.builtin.set_fact:
+        SALT: "{{ lookup('password', '/dev/null chars=ascii_letters,digits length=16') }}"
+
+    - name: 🔐 SHA-512 encrypt password
+      run_once: true
+      set_fact:
+        sha512_password: "{{ PASSWORD | arista.avd.secure_hash(salt=SALT, hash_type='sha512_password')}}"
+
+    - name: 🔓 Show SHA-512 encrypted password
+      debug:
+        msg:
+          - "The SHA-512 password for [{{ PASSWORD }}] with salt [{{ SALT }}]"
+          - "SHA-512: [{{ sha512_password }}]"

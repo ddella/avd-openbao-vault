@@ -1,0 +1,23 @@
+---
+#####################################################################
+######################## SYSTEM SETTINGS ############################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#system-settings
+general_settings:
+  # interface_defaults:
+  #   # Shutdown Ethernet interfaces by default unless they are explicitly enabled.
+  #   ethernet_shutdown: <bool; default=False>
+  arp:
+    # persistent:
+    #   # Restore the ARP cache after reboot.
+    #   enabled: <bool; required>
+    #   # Time to wait in seconds before refreshing the ARP cache after reboot (EOS default 600).
+    #   refresh_delay: <int; 600-3600>
+    aging:
+      # Timeout in seconds.
+      timeout_default: 5400
+
+mac_address_table:
+  aging_time: 7200
+
+default_interface_mtu: 9214

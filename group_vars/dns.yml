@@ -1,0 +1,20 @@
+---
+#####################################################################
+################################ DNS ################################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#dns
+# Define the default name for the default mgmt VRF
+dns_vrf_name: "use_mgmt_interface_vrf"
+dns_vrf_list: []
+
+dns_settings:
+  domain: "kloud.lan"
+  servers:  # >=1 items; required
+    - ip_address: 192.168.13.16
+      # Priority value (lower is first).
+      # priority: 1
+      vrf: "{{ dns_vrf_name }}"
+    - ip_address: 192.168.13.17
+      # priority: 2
+      vrf: "{{ dns_vrf_name }}"
+  vrfs: "{{ dns_vrf_list }}"

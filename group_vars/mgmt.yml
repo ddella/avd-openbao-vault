@@ -1,0 +1,24 @@
+---
+#####################################################################
+############################### MGMT ################################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#management-interface
+# Out-of-Band (OOB) management interface settings.
+### GLOBAL DEFAULT: Management Gateway IP
+### Set to NULL to prevent accidental routing to a default IP.
+### This MUST be overridden in specific 'group_vars/all' (e.g., mgmt.yml).
+mgmt_gateway_ip: NULL
+mgmt_intf: NULL
+
+### --- DO NOT MODIFY BELOW THIS LINE ---
+### These settings apply globally and dynamically inherit the gateway IP from groups.
+mgmt_interface_settings:
+  description: "oob-management"
+  vrf: "mgmt"
+  vrf_routing: true
+  # Name of the management interface (e.g. Management0, Management1) default="Management1".
+  interface: "{{ mgmt_intf }}"
+
+# OOB Management interface gateway in IPv4 format.
+# Used as next-hop for default gateway or static routes defined under 'mgmt_destination_networks'.
+mgmt_gateway: "{{ mgmt_gateway_ip }}"

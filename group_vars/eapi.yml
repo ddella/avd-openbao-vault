@@ -1,0 +1,18 @@
+---
+#####################################################################
+############################### eAPI ################################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#management-eapi
+# Default is HTTPS management eAPI enabled.
+# Define the default name for the default mgmt VRF
+eapi_vrf_name: "use_mgmt_interface_vrf"
+
+management_eapi:
+  # Enable/Disable api http-commands.
+  enabled: true
+  vrfs:
+    - name: "{{ eapi_vrf_name }}"
+      # Enable/disable Management eAPI for this VRF.
+      enabled: true
+      # IPv4 access-list name.
+      # ipv4_acl: "EAPI_ACL"

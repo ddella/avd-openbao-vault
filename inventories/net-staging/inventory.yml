@@ -1,0 +1,61 @@
+---
+all:
+  vars:
+    bao_env: net-staging
+  children:
+    FABRIC:
+      children:
+        DC1:
+          children:
+            DC1_SPINES:
+              vars:
+                type: spine
+              hosts:
+                dc1-spine1:
+                  ansible_host: 172.17.1.11
+                dc1-spine2:
+                  ansible_host: 172.17.1.12
+            DC1_L3_LEAVES:
+              vars:
+                type: l3leaf
+              hosts:
+                dc1-leaf1:
+                  ansible_host: 172.17.1.101
+                dc1-leaf2:
+                  ansible_host: 172.17.1.102
+        DC2:
+          children:
+            DC2_SPINES:
+              vars:
+                type: spine
+              hosts:
+                dc2-spine1:
+                  ansible_host: 172.17.2.11
+                dc2-spine2:
+                  ansible_host: 172.17.2.12
+            DC2_L3_LEAVES:
+              vars:
+                type: l3leaf
+              hosts:
+                dc2-leaf1:
+                  ansible_host: 172.17.2.101
+                dc2-leaf2:
+                  ansible_host: 172.17.2.102
+        DC3:
+          children:
+            DC3_SPINES:
+              vars:
+                type: spine
+              hosts:
+                dc3-spine1:
+                  ansible_host: 172.17.3.11
+                dc3-spine2:
+                  ansible_host: 172.17.3.12
+            DC3_L3_LEAVES:
+              vars:
+                type: l3leaf
+              hosts:
+                dc3-leaf1:
+                  ansible_host: 172.17.3.101
+                dc3-leaf2:
+                  ansible_host: 172.17.3.102

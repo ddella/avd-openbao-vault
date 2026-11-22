@@ -1,0 +1,29 @@
+---
+####################################################################
+################################ NTP ################################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#time-configuration
+ntp_vrf_name: ""
+
+ntp_settings:
+  server_vrf: "{{ ntp_vrf_name }}"
+  servers:
+    - name: 10.0.1.123
+      key: 1
+    - name: 10.0.2.123
+      key: 2
+  authenticate: true
+  authentication_keys:
+    - id: 1
+      hash_algorithm: md5
+      cleartext_key: "{{ ntp_auth_secrets.key1 }}"
+    - id: 2
+      hash_algorithm: md5
+      cleartext_key: "{{ ntp_auth_secrets.key2 }}"
+  trusted_keys: "2"
+
+#####################################################################
+############################# Timezone ##############################
+#####################################################################
+# https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#time-configuration
+timezone: "America/New_York"

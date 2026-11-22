@@ -1,0 +1,19 @@
+---
+# Common varable assigned to all devices in the Net-Prod site
+acme_data_center: Net Prod Data Center
+
+# Reuse same IP for mlag L2 and L3 peering
+fabric_ip_addressing:
+  mlag:
+    algorithm: same_subnet
+
+# to these other variables is outside the scope of this PR
+acme_site_as: 100
+acme_wan_as: 110
+acme_acc_as: 120
+
+# Targets Structured Config phase. Do NOT use 'custom_templates'.
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/how-to/custom-templates.html
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/role-configuration.html#custom-templates
+eos_designs_custom_templates:
+  - template: "{{ playbook_dir }}/../custom_templates/cv_tags/custom_cv_tags.j2"

@@ -1,0 +1,19 @@
+---
+#####################################################################
+#################### CLOUDVISION SETTINGS ###########################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#cloudvision-settings
+cv_vrf_name: "use_mgmt_interface_vrf"
+cv_source_interface: ""
+
+cv_settings:
+  cvaas:
+    enabled: true
+    clusters:
+      - name: cvaas
+        region: auto
+        vrf: "{{ cv_vrf_name }}"
+        source_interface: "{{ cv_source_interface }}"
+  terminattr:
+    ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
+  set_source_interfaces: false

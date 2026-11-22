@@ -1,0 +1,72 @@
+{#
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_cli_config_gen/docs/data-models.html#metadata
+# https://avd.arista.com/6.5/docs/plugins/Filter_plugins/range_expand.html
+# The data under `metadata` is used for documentation, validation or integration purposes.
+metadata:
+  cv_tags:
+    device_tags:
+      - name: <str; required>
+        value: <str; required>
+    interface_tags:
+      - interface: <str; required>
+        tags:
+          - name: <str; required>
+            value: <str; required>
+
+  Template: custom_cv_tags.j2
+  
+  Purpose: 
+    Injects custom CloudVision tags (cv_tags) into the device structured_config.
+    This template bypasses Ansible's default list-overwriting behavior by 
+    building the list dynamically from multiple dictionaries.
+  
+  Dependencies: 
+    Relies on the three dictionnaries
+    - 'fabric_device_tags' 
+    - 'fabric_device_global_tags' 
+    - 'fabric_interface_tags' 
+    
+    typically loaded globally via the vars plugin from the '_common_vars/' and 'global_vars/' directories.
+    
+  Execution Phase:
+    Must be called via 'eos_designs_custom_templates' (eos_designs phase).
+#}
+
+{% if fabric_device_global_tags is defined or (fabric_device_tags is defined and inventory_hostname in fabric_device_tags) or (fabric_interface_tags is defined and inventory_hostname in fabric_interface_tags) %}
+metadata:
+  cv_tags:
+{% if fabric_device_global_tags is defined or (fabric_device_tags is defined and inventory_hostname in fabric_device_tags) %}
+    device_tags:
+{% if fabric_device_global_tags is defined %}
+{% for tag in fabric_device_global_tags %}
+      - name: {{ tag.name }}
+        value: "{{ tag.value }}"
+{% endfor %}
+{% endif %}
+{% if fabric_device_tags is defined and inventory_hostname in fabric_device_tags %}
+{% for tag in fabric_device_tags[inventory_hostname] %}
+      - name: {{ tag.name }}
+        value: "{{ tag.value }}"
+{% endfor %}
+{% endif %}
+{% endif %}
+{# ###### BEGIN INTERFACES ###### #}
+{# Using 'arista.avd.range_expand' #}
+
+{% if fabric_interface_tags is defined and inventory_hostname in fabric_interface_tags %}
+    interface_tags:
+{% for intf in fabric_interface_tags[inventory_hostname] %}
+{% for expanded_intf in intf.interface | arista.avd.range_expand %}
+      - interface: {{ expanded_intf }}
+        tags:
+{% if intf.tags is defined %}
+{% for tag in intf.tags %}
+          - name: {{ tag.name }}
+            value: "{{ tag.value }}"
+{% endfor %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endif %}
+{# ###### END INTERFACES ###### #}
+{% endif %}

@@ -1,0 +1,51 @@
+---
+#####################################################################
+################################ sFlow ##############################
+#####################################################################
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_cli_config_gen/docs/data-models.html#sflow
+# Define the standard Ansible variable
+mycustom_sflow_vrfs:
+  - name: default
+    destinations:
+      - destination: 127.0.0.1
+    source_interface: Loopback0
+
+# Reference the variable in the structured config
+custom_structured_configuration_sflow:
+  sample: 16384
+  polling_interval: 10
+  extensions:
+    - name: bgp
+      enabled: true
+  run: true
+  vrfs: "{{ mycustom_sflow_vrfs }}"
+
+# https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#sflow
+sflow_settings:
+  destinations:
+    - destination: 127.0.0.1
+
+# https://avd.arista.com/6.4/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#sflow
+# sflow_uplinks: false
+# sflow_downlinks: false
+# sflow_endpoints: false
+# sflow_l3_edge: false
+# sflow_core_interfaces: false
+# sflow_mlag_interfaces: false
+# sflow_l3_interfaces: false
+
+# fabric_sflow:
+#   # Enable sFlow on all fabric uplinks.
+#   uplinks: "{{ sflow_uplinks }}"
+#   # Enable sFlow on all fabric downlinks.
+#   downlinks: "{{ sflow_downlinks }}"
+#   # Enable sFlow on all endpoints ports.
+#   # endpoints: "{{ sflow_endpoints }}"
+#   # Enable sFlow on all p2p_links defined under l3_edge.
+#   l3_edge: "{{ sflow_l3_edge }}"
+#   # Enable sFlow on all p2p_links defined under core_interfaces.
+#   core_interfaces: "{{ sflow_core_interfaces }}"
+#   # Enable sFlow on all MLAG peer interfaces.
+#   mlag_interfaces: "{{ sflow_mlag_interfaces }}"
+#   # Enable sFlow on all l3 interfaces.
+#   l3_interfaces: "{{ sflow_l3_interfaces }}"

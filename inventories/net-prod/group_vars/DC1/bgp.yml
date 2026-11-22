@@ -1,0 +1,52 @@
+---
+# https://avd.arista.com/6.5/ansible_collections/arista/avd/roles/eos_designs/docs/data-models.html#bgp-settings
+# BGP AS <1-4294967295> or AS number in asdot notation "<1-65535>.<0-65535>" to use to configure overlay when
+# "overlay_routing_protocol" == ibgp.
+# For asdot notation in YAML inputs, the value must be put in quotes, to prevent it from being interpreted as a float number.
+# Default activation of IPv4 unicast address-family on all IPv4 neighbors.
+# It is best practice to disable activation.
+bgp_default_ipv4_unicast: false
+# Maximum ECMP for BGP multi-path.
+bgp_ecmp: 4
+# Maximum Paths for BGP multi-path.
+# The default value is 4 except for WAN Routers where the default value is 16.
+bgp_maximum_paths: 4
+
+# BGP graceful-restart allows a BGP speaker with separate control plane and data plane processing to continue
+# forwarding traffic during a BGP restart.
+# Its neighbors (receiving speakers) may retain routing information from the restarting speaker while a BGP
+# session with it is being re-established, reducing route flapping.
+bgp_graceful_restart:
+  # Enable or disable graceful-restart for all BGP peers.
+  enabled: true
+  # Restart time in seconds.
+  restart_time: 300
+
+bgp_distance:
+  external_routes: 20
+  internal_routes: 200
+  local_routes: 20
+
+bgp_peer_groups:
+  ipv4_underlay_peers:
+    # Name of peer group.
+    name: IPv4-UNDERLAY-PEERS
+    # BGP peer group cleartext password.
+    cleartext_password: "{{ bgp.dc1.underlay.password }}"
+    bfd: false
+    # Maximum number of routes (0 means unlimited).
+    maximum_routes: 512000
+
+  evpn_overlay_peers:
+    # Name of peer group.
+    name: EVPN-OVERLAY-PEERS
+    cleartext_password: "{{ bgp.dc1.overlay.password }}"
+    bfd: true
+
+  mlag_ipv4_underlay_peer:
+    # Name of peer group.
+    name: MLAG-IPv4-UNDERLAY-PEER
+    cleartext_password: "{{ bgp.dc1.mlag.password }}"
+    bfd: false
+    # Maximum number of routes (0 means unlimited).
+    maximum_routes: 0

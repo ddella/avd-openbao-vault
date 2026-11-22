@@ -1,0 +1,19 @@
+---
+# Centralized dictionary mapping tags to specific hostnames
+# from the 'inventory.yml' file.
+
+fabric_interface_tags:
+  ############################
+  ######### NET-PROD #########
+  ############################
+  dc1-spine1:
+    - interface: Ethernet1-4,Ethernet11-14
+      tags:
+        - name: intf-1
+          value: network
+
+  dc1-spine2:
+    - interface: Ethernet1-4,Ethernet11-14
+      tags:
+        - name: intf-1
+          value: network
