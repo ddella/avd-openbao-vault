@@ -10,7 +10,7 @@ Start it:
 
 ```bash
 docker compose up -d
-docker compose logs -f openbao      # wait for: "==> OpenBao server started!"
+docker logs -f openbao      # wait for: "==> OpenBao server started!"
 ```
 
 ## Step 2: 🔓 Unseal OpenBao
@@ -19,6 +19,23 @@ docker compose logs -f openbao      # wait for: "==> OpenBao server started!"
 
 ```bash
 docker exec openbao bao status
+```
+
+Output for a sealed database
+```text
+Key                Value
+---                -----
+Seal Type          shamir
+Initialized        true
+Sealed             true 👈
+Total Shares       5
+Threshold          3
+Unseal Progress    0/3
+Unseal Nonce       n/a
+Version            2.7.3
+Commit Date        2026-11-19T20:06:41Z
+Storage Type       raft
+HA Enabled         true
 ```
 
 ### Unseal

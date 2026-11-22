@@ -132,9 +132,30 @@ listener "tcp" {
 `compose.yaml`:
 
 ```yaml
+# Start the deployment
+#   docker compose --file /opt/openbao/compose.yaml up --detach
+#   docker compose --file /opt/openbao/compose.yaml up --detach --remove-orphans
+#   docker compose --file /opt/openbao/compose.yaml restart
+# Destroy the deployment
+#   docker compose --file /opt/openbao/compose.yaml down --remove-orphans
+# Stop by keeps everything
+#   docker compose --file /opt/openbao/compose.yaml stop
+#   docker compose --file /opt/openbao/compose.yaml rm --force
+# List the running container
+#   docker ps --format 'table {{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Names}}'
+# Jump inside a container
+#   docker exec -it openbao /bin/sh
+# Check logs
+#   docker compose --file /opt/openbao/compose.yaml logs
+# Restart bind
+#   docker kill -s HUP openbao
+
+# ------------------------------------------------#
+#        OpenBao Container
+# ------------------------------------------------#
 services:
   openbao:
-    image: quay.io/openbao/openbao:2.7.2
+    image: quay.io/openbao/openbao:2.7.3
     container_name: openbao
     command: server
     restart: unless-stopped
@@ -162,7 +183,7 @@ volumes:
 Start it:
 
 ```bash
-docker compose up -d
+docker compose --file /opt/openbao/compose.yaml up --detach
 docker logs -f openbao      # wait for: "==> OpenBao server started!"
 ```
 
@@ -233,7 +254,7 @@ Raft Committed Index    179
 Raft Applied Index      179
 ```
 
-> OpenBao **re-seals on every restart** (container, Docker or host reboot). You have to repeat the unseal step each time, or set up auto-unseal (see §11).
+> OpenBao **re-seals on every restart** (container, Docker or host reboot). You have to repeat the unseal step each time, or set up auto-unseal.
 
 ## 8. Log in and verify
 
@@ -305,7 +326,8 @@ docker exec openbao bao operator raft snapshot save /tmp/bao.snap
 mkdir -p backup
 docker cp openbao:/tmp/bao.snap ./backup/bao-$(date +%F).snap
 ```
-   Restore with `bao operator raft snapshot restore`.
+
+> Restore with `bao operator raft snapshot restore`.
 
 ## Section 11: next steps
 
@@ -327,16 +349,19 @@ Install OpenBAO cli on Ubuntu 26.04 LTS for either `amd64` or `arm64`:
 
 ```bash
 TARGETARCH=$(dpkg --print-architecture)
+BAO_VERSION=$(curl -fsSL https://api.github.com/repos/openbao/openbao/releases/latest | jq -er '.tag_name')
 BAO_FILE="openbao_${BAO_VERSION#v}_linux_${TARGETARCH}.tar.gz"
+BASE_URL="https://github.com/openbao/openbao/releases/download/${BAO_VERSION}"
+
 echo "Installing OpenBao CLI ${BAO_VERSION} for ${TARGETARCH}"
-curl -fsSLO "https://github.com/openbao/openbao/releases/download/${BAO_VERSION}/${BAO_FILE}" \
-curl -fsSL "https://github.com/openbao/openbao/releases/download/${BAO_VERSION}/checksums.txt" \
- | grep " ${BAO_FILE}$" | sha256sum -c - \
-tar -C /usr/local/bin --no-same-owner -xzf "${BAO_FILE}" bao \
-rm -f "${BAO_FILE}" \
+curl -fsSLO "${BASE_URL}/${BAO_FILE}" && \
+curl -fsSL "${BASE_URL}/checksums.txt" | grep " ${BAO_FILE}$" | sha256sum -c - && \
+sudo tar -C /usr/local/bin --no-same-owner -xzf "${BAO_FILE}" bao && \
+rm -f "${BAO_FILE}" && \
 bao version
 ```
 
+> [!NOTE] The `bao` cli should be installed in the Dev Container.  
 
 ## Section 13: using it from Ansible / AVD
 
@@ -361,7 +386,7 @@ That token can only read `network/fabric/*`, and it expires on its own. For CI/C
 
 ```bash
 export VAULT_ADDR=https://openbao.kloud.lan:8200
-export VAULT_CACERT=bao-cert/openbao.kloud.lan-chain.pem
+export VAULT_CACERT="$(realpath bao-cert/openbao.kloud.lan-chain.pem)"
 export VAULT_TOKEN=s.zXHWGfCEOA6fnN54C4rpej3n   # token from step 2
 make build ENV=net-prod
 ```

@@ -17,19 +17,44 @@
         msg: "ENV={{ ENV | default(bao_env | default('undefined')) }}"
       run_once: true
 
+    # Only the DCs of the hosts in this run (--limit) need their secrets.
+    # A token scoped to some DCs (e.g. dc1+dc3, see 04_Users.md) can't read
+    # the others, so we must not even try.
+    - name: 🧭 Find which DC secrets this run needs
+      ansible.builtin.set_fact:
+        _bao_needed_dcs: >-
+          {{ ansible_play_hosts_all | map('extract', hostvars)
+             | selectattr('bao_dc', 'defined') | map(attribute='bao_dc') | unique }}
+      run_once: true
+
+    - name: 🖨 Print DCs fetched from OpenBao
+      ansible.builtin.debug:
+        msg: "Fetching dc/<dc>/* secrets for: {{ _bao_needed_dcs | join(', ') }}"
+      run_once: true
+
     # The _bao_* vars in global_vars/secret.yml are lazy lookups: Ansible
     # re-runs the lookup every time they are templated (thousands of times
     # inside AVD). Resolve each secret ONCE here; run_once + set_fact applies
     # the facts to every host, and facts outrank global_vars.
+    #
+    # DCs outside the limit get a placeholder instead of an OpenBao call.
+    # eos_designs still templates those hosts' vars (cross-DC facts) but
+    # writes no config for them, so the placeholder never reaches an output.
     - name: 🧲 Fetch secrets from OpenBao once
       ansible.builtin.set_fact:
         _bao_global_aaa: "{{ _bao_global_aaa }}"
         _bao_global_security: "{{ _bao_global_security }}"
         _bao_global_snmp: "{{ _bao_global_snmp }}"
-        _bao_dc1_bgp: "{{ _bao_dc1_bgp }}"
-        _bao_dc2_bgp: "{{ _bao_dc2_bgp }}"
-        _bao_dc3_bgp: "{{ _bao_dc3_bgp }}"
+        _bao_dc1_bgp: "{{ _bao_dc1_bgp if 'dc1' in _bao_needed_dcs else _bao_dc_not_fetched }}"
+        _bao_dc2_bgp: "{{ _bao_dc2_bgp if 'dc2' in _bao_needed_dcs else _bao_dc_not_fetched }}"
+        _bao_dc3_bgp: "{{ _bao_dc3_bgp if 'dc3' in _bao_needed_dcs else _bao_dc_not_fetched }}"
         _bao_global_users: "{{ _bao_global_users }}"
+      vars:
+        _bao_dc_not_fetched:
+          underlay_password: NOT-FETCHED-outside-limit
+          overlay_password: NOT-FETCHED-outside-limit
+          mlag_password: NOT-FETCHED-outside-limit
+          evpn_route_server_password: NOT-FETCHED-outside-limit
       run_once: true
       no_log: true
 
