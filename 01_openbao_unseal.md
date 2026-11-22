@@ -78,10 +78,9 @@ Execute those commands **inside** your Dev Container:
 
 ```bash
 export VAULT_ADDR=https://openbao.kloud.lan:8200
-export BAO_ADDR="$VAULT_ADDR"
-export CERT_PATH="$(realpath bao-cert/openbao.kloud.lan-chain.pem)"
-export VAULT_CACERT="$CERT_PATH"
-export BAO_CACERT="$CERT_PATH"
+export VAULT_CACERT="$(realpath bao-cert/openbao.kloud.lan-chain.pem)"
+export VAULT_TOKEN=s.zXHWGfCEOA6fnN54C4rpej3n
+make build ENV=net-prod
 ```
 
 ### Web UI

@@ -363,7 +363,7 @@ That token can only read `network/fabric/*`, and it expires on its own. For CI/C
 export VAULT_ADDR=https://openbao.kloud.lan:8200
 export VAULT_CACERT=bao-cert/openbao.kloud.lan-chain.pem
 export VAULT_TOKEN=s.zXHWGfCEOA6fnN54C4rpej3n   # token from step 2
-ansible-playbook playbooks/build.yml -i inventories/net-prod/inventory.yml
+make build ENV=net-prod
 ```
 
 - `VAULT_ADDR` tells the `community.hashi_vault` lookups in `global_vars/secret.yml` where the server is.

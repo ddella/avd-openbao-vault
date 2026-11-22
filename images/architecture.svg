@@ -13,13 +13,14 @@
   <rect x="45" y="80" width="710" height="350" rx="10" fill="#eef6fd" stroke="#2496ed" stroke-width="2" stroke-dasharray="7 5"/>
   <text x="65" y="108" font-size="15" font-weight="600" fill="#1d63a8">Docker</text>
 
-  <!-- DevContainer -->
+  <!-- Arista DevContainer -->
   <rect x="75" y="125" width="270" height="170" rx="10" fill="#ffffff" stroke="#2496ed" stroke-width="2"/>
   <rect x="75" y="125" width="270" height="42" rx="10" fill="#2496ed"/>
   <rect x="75" y="150" width="270" height="17" fill="#2496ed"/>
-  <text x="210" y="153" font-size="17" font-weight="700" fill="#ffffff" text-anchor="middle">DevContainer</text>
+  <text x="210" y="153" font-size="17" font-weight="700" fill="#ffffff" text-anchor="middle">Arista DevContainer</text>
   <text x="210" y="205" font-size="16" fill="#2f3b45" text-anchor="middle">Arista AVD 6.5.0</text>
   <text x="210" y="240" font-size="16" fill="#2f3b45" text-anchor="middle">Python 3.14.10</text>
+  <text x="210" y="275" font-size="16" fill="#2f3b45" text-anchor="middle">Ansible 2.21.6</text>
 
   <!-- OpenBao container -->
   <rect x="455" y="125" width="270" height="170" rx="10" fill="#ffffff" stroke="#2496ed" stroke-width="2"/>
