@@ -296,7 +296,7 @@ path "*" { capabilities = ["create","read","update","delete","list","sudo"] }
 EOF
 docker exec openbao bao auth enable userpass
 # password=- reads stdin silently (no prompt), so pipe it in with -i (not -it)
-read -rsp "Password: " PW; echo
+printf %s "Password: "; read -rs PW; echo
 printf '%s' "$PW" | docker exec -i openbao bao write auth/userpass/users/daniel password=- policies=admin
 unset PW
 

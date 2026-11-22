@@ -311,7 +311,7 @@ bao token lookup     # shows ttl and policies
 Tokens are quick to set up, but a token is a shared secret with no name behind it. For people, prefer a personal login that carries the same policies, so the audit log shows who did what and the user picks their own password:
 
 ```bash
-read -rsp "Password for alice: " P; echo
+printf %s "Password for alice: "; read -rs P; echo
 printf '%s' "$P" | bao write auth/userpass/users/alice \
     password=- \
     token_policies="net-prod-global-read,netops-net-prod-dc1-dc3-write" \

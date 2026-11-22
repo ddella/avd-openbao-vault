@@ -351,7 +351,7 @@ make build ENV=net-prod
 **Keep secrets out of shell history.** Pass `key=-` and pipe the value in:
 
 ```bash
-read -rsp "New value: " V; echo
+printf %s "New value: "; read -rs V; echo
 printf '%s' "$V" | bao kv patch -cas=<ver> net-prod/dc/dc1/bgp underlay_password=-
 unset V
 ```
@@ -402,9 +402,9 @@ Then use `aaa.tacacs.server2.key` in `group_vars`.
 **Case B: a new category** (e.g. SNMPv3):
 
 ```bash
-read -rsp "SNMP auth: " A; echo
+printf %s "SNMP auth: "; read -rs A; echo
 printf '%s' "$A" | bao kv put   -cas=0 net-prod/global/snmp v3_auth=-   # create (v1)
-read -rsp "SNMP priv: " P; echo
+printf %s "SNMP priv: "; read -rs P; echo
 printf '%s' "$P" | bao kv patch -cas=1 net-prod/global/snmp v3_priv=-   # add 2nd key (v2)
 unset A P
 ```
@@ -468,8 +468,8 @@ bao kv metadata delete net-prod/dc/dc3/bgp          # wipe all versions + metada
 
 1. **Create its secrets** in each environment where the DC exists:
    ```bash
-  read -rsp "Underlay: " U; echo; printf '%s' "$U" | bao kv put   -cas=0 net-prod/dc/dc4/bgp underlay_password=-
-  read -rsp "Overlay: "  O; echo; printf '%s' "$O" | bao kv patch -cas=1 net-prod/dc/dc4/bgp overlay_password=-
+  printf %s "Underlay: "; read -rs U; echo; printf '%s' "$U" | bao kv put   -cas=0 net-prod/dc/dc4/bgp underlay_password=-
+  printf %s "Overlay:  "; read -rs O; echo; printf '%s' "$O" | bao kv patch -cas=1 net-prod/dc/dc4/bgp overlay_password=-
    unset U O
    ```
 2. **Add the inventory groups** `DC4`, `DC4_SPINES` and `DC4_L3_LEAVES`, with `bao_dc: dc4` in `group_vars/DC4.yml` for each environment that will host it.

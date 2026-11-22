@@ -1,4 +1,4 @@
-# Start
+# Start Pilot
 
 The commands below can be executed inside the Dev Container, only if you have configured Docker outside of Docker (DooD).
 
@@ -162,7 +162,7 @@ bao kv metadata get -format=json net-prod/dc/dc1/bgp | jq '.data.current_version
 Use `patch` (not `put`): it changes `underlay_password` only and keeps `overlay_password` and `mlag_password`. The value is read from the prompt, so it stays out of your shell history.
 
 ```bash
-read -rsp "New DC1 underlay password: " V; echo
+printf %s "New DC1 underlay password: "; read -rs V; echo
 printf '%s' "$V" | bao kv patch -cas=1 net-prod/dc/dc1/bgp underlay_password=-
 unset V
 ```
