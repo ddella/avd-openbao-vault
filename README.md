@@ -5,6 +5,8 @@ three AVD datacenters. Each datacenter has two spines and two leaves. Secrets ar
 pulled at runtime from that environment's **OpenBao** mount; nothing sensitive is
 stored in Git.
 
+![Architecture](images/architecture.svg)
+
 ## Layout
 
 | File | Purpose |

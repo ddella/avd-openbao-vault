@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" width="800" height="470" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+
+  <!-- Background (keeps it readable in light and dark themes) -->
+  <rect x="0" y="0" width="800" height="470" rx="14" fill="#ffffff"/>
+
+  <!-- Ubuntu host -->
+  <rect x="20" y="20" width="760" height="430" rx="12" fill="#fdf1ec" stroke="#e95420" stroke-width="2.5"/>
+  <circle cx="48" cy="50" r="11" fill="#e95420"/>
+  <text x="68" y="57" font-size="20" font-weight="700" fill="#2f3b45">Ubuntu 26.04.1 LTS</text>
+  <text x="760" y="57" font-size="14" fill="#6b7780" text-anchor="end">Host</text>
+
+  <!-- Docker -->
+  <rect x="45" y="80" width="710" height="350" rx="10" fill="#eef6fd" stroke="#2496ed" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="65" y="108" font-size="15" font-weight="600" fill="#1d63a8">Docker</text>
+
+  <!-- DevContainer -->
+  <rect x="75" y="125" width="270" height="170" rx="10" fill="#ffffff" stroke="#2496ed" stroke-width="2"/>
+  <rect x="75" y="125" width="270" height="42" rx="10" fill="#2496ed"/>
+  <rect x="75" y="150" width="270" height="17" fill="#2496ed"/>
+  <text x="210" y="153" font-size="17" font-weight="700" fill="#ffffff" text-anchor="middle">DevContainer</text>
+  <text x="210" y="205" font-size="16" fill="#2f3b45" text-anchor="middle">Arista AVD 6.5.0</text>
+  <text x="210" y="240" font-size="16" fill="#2f3b45" text-anchor="middle">Python 3.14.10</text>
+
+  <!-- OpenBao container -->
+  <rect x="455" y="125" width="270" height="170" rx="10" fill="#ffffff" stroke="#2496ed" stroke-width="2"/>
+  <rect x="455" y="125" width="270" height="42" rx="10" fill="#2496ed"/>
+  <rect x="455" y="150" width="270" height="17" fill="#2496ed"/>
+  <text x="590" y="153" font-size="17" font-weight="700" fill="#ffffff" text-anchor="middle">OpenBao container</text>
+  <text x="590" y="222" font-size="16" fill="#2f3b45" text-anchor="middle">OpenBao 2.7.2</text>
+
+  <!-- Secrets flow -->
+  <line x1="357" y1="215" x2="443" y2="215" stroke="#2f3b45" stroke-width="2"/>
+  <polygon points="347,215 359,208 359,222" fill="#2f3b45"/>
+  <polygon points="453,215 441,208 441,222" fill="#2f3b45"/>
+  <text x="400" y="204" font-size="14" fill="#2f3b45" text-anchor="middle">Secrets</text>
+
+  <!-- Volume mount -->
+  <line x1="590" y1="295" x2="590" y2="328" stroke="#2f3b45" stroke-width="2" stroke-dasharray="5 4"/>
+
+  <!-- Docker volume (cylinder) -->
+  <path d="M495,340 L495,398 A95,12 0 0 0 685,398 L685,340 Z" fill="#dcebf9" stroke="#2496ed" stroke-width="2"/>
+  <ellipse cx="590" cy="340" rx="95" ry="12" fill="#eef6fd" stroke="#2496ed" stroke-width="2"/>
+  <text x="590" y="372" font-size="15" font-weight="600" fill="#2f3b45" text-anchor="middle">openbao_bao-data</text>
+  <text x="590" y="391" font-size="13" fill="#6b7780" text-anchor="middle">Docker volume</text>
+</svg>
