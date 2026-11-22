@@ -23,6 +23,8 @@
 # The timezone (TZ) and AGE_PRIVATE_KEY are set in "containerEnv" in devcontainer.json.
 # To list the valid timezone names: find /usr/share/zoneinfo/ -type f
 
+git config --global devcontainers-theme.show-dirty 1
+
 # Add the 'avd' user to the 'docker' group
 # ⛔⛔⛔ DON'T DO THAT ⛔⛔⛔
 # Get the GID of the 'avd' group
